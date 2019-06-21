@@ -1,12 +1,14 @@
 ---
-title: "PA1_template.Rmd"
+title: "PA1_template"
 author: "ManSab"
 date: "6/17/2019"
-output: html_document
+output: 
+  html_document:
+    keep_md: true
 ---
 ### Activity Monitoring Peer-graded Assignment
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, results = "markup", dev="png" )
+knitr::opts_chunk$set(echo = TRUE, dev="png" )
 library("lubridate")
 library("ggplot2")
 library("magrittr")
