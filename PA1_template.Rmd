@@ -4,47 +4,47 @@ author: "ManSab"
 date: "6/17/2019"
 output: html_document
 ---
-## Activity Monitoring Peer-graded Assignment
+### Activity Monitoring Peer-graded Assignment
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, results = "markup")
+knitr::opts_chunk$set(echo = TRUE, results = "markup", dev="png" )
 library("lubridate")
 library("ggplot2")
 library("magrittr")
 library("dplyr")
 ```
 
-###1) Read activity file into data frame that has following columns: steps, date and interval.
+####1) Read activity file into data frame that has following columns: steps, date and interval. Date is also formated.
 ``` {r}
 
 Activity <- read.csv("activity.csv")
 Activity$date <- as.character(Activity$date)
 Activity$date <- ymd(Activity$date)
 ```
-###2) Histogram of the total number of steps taken each day
-``` {r}
+####2) Histogram of the total number of steps taken each day
+``` {r dpi=36, out.width="400px", out.height="400px"}
 Act_Hist <- Activity %>% group_by(date) %>% summarise(st = sum(steps))
 #graphics.off()
 hist(Act_Hist$st,xlab = "Daily Steps", main = "Daily Steps", col = "RED")
 ```
 
-###3) Mean and Median steps taken each day
+####3) Mean and Median steps taken each day
 ```{r}
 summary(Act_Hist)
 ```
 
-###4) Time series plot of the average number of steps taken
+####4) Time series plot of the average number of steps taken
 Make a time series plot (i.e.type="l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
-```{r}
+```{r dpi=36, out.width="400px", out.height="400px"}
 Act_Avg <- aggregate(Activity$steps~Activity$interval,Activity,mean)
 plot(Act_Avg$`Activity$steps`~Act_Avg$`Activity$interval`, type="l", xlab = "Time Interval", ylab = "Avg.Steps",main = "Average steps", col = "blue")
 ```
 
-###5) The 5-minute interval that, on average, contains the maximum number of steps
+####5) The 5-minute interval that, on average, contains the maximum number of steps
 ```{r}
 
 Act_Avg[which.max(Act_Avg$`Activity$steps`),]
 ```
-###6) Code to describe and show a strategy for imputing missing data.
+####6) Code to describe and show a strategy for imputing missing data.
 Let's check NA's in the data set
 
 ```{r}
@@ -62,28 +62,29 @@ for(i in 1:nrow(ImpActivity)){
 }
 
 ```
-###7) Histogram of the total number of steps taken each day after missing values are imputed.
-```{r}
+####7) Histogram of the total number of steps taken each day after missing values are imputed.
+```{r dpi=36, out.width="400px", out.height="400px"}
 ImpHist <- ImpActivity %>% group_by(date) %>% summarise(st = sum(steps))
 #graphics.off()
 hist(ImpHist$st,xlab = "Daily Steps", main = "Daily Steps", col = "blue")
 
 ```
 
-###8) Mean and Median steps taken each day after values are imputed. There clearly are differences in median, first and third quantile values.
+####8) Mean and Median steps taken each day after values are imputed. There clearly are differences in median, first and third quantile values.
 ```{r}
 summary(ImpHist)
 ```
 
-###9) Panel plot comparing the average number of steps taken per 5-minute interval across weekdays and weekends
-```{r}
+####9) Panel plot comparing the average number of steps taken per 5-minute interval across weekdays and weekends
+```{r dpi=36, out.width="400px", out.height="400px"}
 
-ImpHistWD <- ImpActivity %>% mutate(Wtype = if_else(weekdays(as.Date(ImpActivity$date)) %in% c('Saturday','Sunday'),"Weekend","Week"))
+ImpHistWD <- ImpActivity %>% mutate(Wtype = if_else(weekdays(as.Date(ImpActivity$date)) %in% c('Saturday','Sunday'),"Weekend","Weekday"))
 ImpHistWD$Wtype <- as.factor(ImpHistWD$Wtype)
 
 Dail_Avg <- aggregate(ImpHistWD$steps~ImpHistWD$interval+ImpHistWD$Wtype,ImpHistWD,mean)
 #graphics.off()
-ggplot(Dail_Avg,aes(x=Dail_Avg$`ImpHistWD$interval`,y=Dail_Avg$`ImpHistWD$steps`),color = "Red") +  geom_line() + facet_wrap(.~Dail_Avg$`ImpHistWD$Wtype`, nrow = 2) + xlab("Interval") + ylab("Average number of steps")
+ggplot(Dail_Avg,aes(x=Dail_Avg$`ImpHistWD$interval`,y=Dail_Avg$`ImpHistWD$steps`),color=`Weekday or Weekend`) +  geom_line() + facet_wrap(.~Dail_Avg$`ImpHistWD$Wtype`, nrow = 2) + xlab("Interval") + ylab("Average number of steps") 
+
 ```
 
 *############   Session info for package and other details #############*
