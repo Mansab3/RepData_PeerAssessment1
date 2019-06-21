@@ -1,5 +1,5 @@
 ---
-title: "PA1_template.Rmd"
+title: "PA1_template.md"
 author: "ManSab"
 date: "6/17/2019"
 output: html_document
